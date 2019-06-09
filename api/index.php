@@ -16,7 +16,9 @@ foreach($pledges->pledges as $s) {
         }
     }
     if ($support) {
-        $supporters[] = ["given_name" => $s->donor->firstName, "family_name" => $s->donor->lastName];
+        // print_r($s);
+        $last_transaction = array_slice($s->transactions, -1)[0];
+        $supporters[] = ["given_name" => $s->donor->firstName, "family_name" => $s->donor->lastName, "date" => $last_transaction->receivedAt, "amount" => $last_transaction->outgoingAmount->cents];
     }
 }
 
