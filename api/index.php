@@ -20,7 +20,7 @@ foreach($pledges->pledges as $s) {
         $new_supporter = ["given_name" => $s->donor->firstName, "family_name" => $s->donor->lastName, "date" => $last_transaction->receivedAt, "amount" => $last_transaction->outgoingAmount->cents, "last" => true];
         foreach ($supporters as $key => $supporter) {
             if (($supporter["given_name"] == $new_supporter["given_name"]) and ($supporter["family_name"] == $new_supporter["family_name"])) {
-                $new_supporter["last"] = false;
+                $supporters[$key]["last"] = false;
                 break;
             }
         }
