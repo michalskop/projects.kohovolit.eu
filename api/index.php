@@ -30,12 +30,12 @@ foreach($pledges->pledges as $s) {
 
 // API call
 // CORS https://stackoverflow.com/a/25661403/1666623
-// header('Access-Control-Allow-Origin: *');
-// header('Access-Control-Allow-Methods: GET');
-// header("Access-Control-Allow-Headers: X-Requested-With");
-// header('Cache-Control: no-cache, must-revalidate');
-// header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-// header('Content-type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET');
+header("Access-Control-Allow-Headers: X-Requested-With");
+header('Cache-Control: no-cache, must-revalidate');
+header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+header('Content-type: application/json; charset=utf-8');
 echo json_encode($supporters);
 
  ?>
