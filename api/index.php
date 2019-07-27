@@ -1,14 +1,15 @@
 <?php
 # API proxy for darujme.cz
 
-error_reporting(E_ALL);
+error_reporting(0);
 
 $settings = json_decode(file_get_contents("./settings.json"));
 $url = "https://www.darujme.cz/api/v1/organization/" . $settings->organization . "/pledges-by-filter?apiId=" . $settings->apiId . "&apiSecret=" . $settings->apiSecret . "&projectId=" . $_GET['projectId'];
 $pledges = json_decode(file_get_contents($url));
 $success = ["success", "success_money_on_account", "sent_to_organization"];
 $supporters = [];
-foreach($pledges->pledges as $s) {
+$snames = [];
+while($s = array_pop($pledges->pledges)) {
     $support = false;
     foreach($s->transactions as $t) {
         if (in_array($t->state, $success)) {
@@ -18,13 +19,11 @@ foreach($pledges->pledges as $s) {
     if ($support) {
         $last_transaction = array_slice($s->transactions, -1)[0];
         $new_supporter = ["given_name" => $s->donor->firstName, "family_name" => $s->donor->lastName, "date" => $last_transaction->receivedAt, "amount" => $last_transaction->outgoingAmount->cents, "last" => true];
-        foreach ($supporters as $key => $supporter) {
-            if (($supporter["given_name"] == $new_supporter["given_name"]) and ($supporter["family_name"] == $new_supporter["family_name"])) {
-                $supporters[$key]["last"] = false;
-                break;
-            }
+        if (in_array($new_supporter["family_name"] . $new_supporter["given_name"], $snames)) {
+            $new_supporter["last"] = false;
         }
         $supporters[] = $new_supporter;
+        $snames[] = $new_supporter["family_name"] . $new_supporter["given_name"];
     }
 }
 
